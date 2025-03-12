@@ -1,33 +1,23 @@
 #include <iostream>
-
+#include "../include/GameEngine.hpp"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
+    GameEngine gameEngine;
+    initializeGame(&gameEngine);
 
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    while (!glfwWindowShouldClose(gameEngine.window)) {
+        float currentFrame = glfwGetTime();
+        gameEngine.deltaTime = currentFrame - gameEngine.lastFrame;
+        gameEngine.lastFrame = currentFrame;
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "First Window", NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-
-    if (glewInit() != GLEW_OK) {
-        std::cout << "Failed to initialize GLEW" << std::endl;
-        return -1;
-    }
-
-    while (!glfwWindowShouldClose(window)) {
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(gameEngine.window);
         glfwPollEvents();
+        std::cout << "Delta Time: " << gameEngine.deltaTime << std::endl;
+        std::cout << "\033[A";
     }
-    
-    glfwTerminate();
+    closeGame(&gameEngine);
+
     return 0;
 }
 
